@@ -28,7 +28,7 @@ export default class Home extends Component {
 
   async componentDidMount() {
     const response = await api.get(
-      `/object/BehBasSaf_BBSObject?$top=30&$skip=0&$expand=Location($select=Name),CreatedBy($select=FullName, FirstName),Categories`
+      `/object/BehBasSaf_BBSObject?$top=30&$skip=0&$expand=Location($select=Name),CreatedBy($select=FullName, FirstName),Categories&$orderby=AssessmentDate desc`
     );
 
     this.setState({
@@ -38,6 +38,32 @@ export default class Home extends Component {
 
     console.log(this.state.observations);
   }
+
+  handlePageClick = async e => {
+    const nextPage = Number(e.target.value);
+
+    await this.setState({ page: nextPage });
+
+    this.loadBBS();
+  };
+
+  loadBBS = async () => {
+    const { page } = this.state;
+
+    await this.setState({
+      loadingPage: true,
+    });
+
+    const response = await api.get(
+      `/object/BehBasSaf_BBSObject?$top=30&$skip=${(page - 1) *
+        30}&$expand=Location($select=Name),CreatedBy($select=FullName, FirstName),Categories&$orderby=AssessmentDate desc`
+    );
+
+    this.setState({
+      observations: response.data.value,
+      loadingPage: false,
+    });
+  };
 
   openSearch = async () => {
     await this.setState({

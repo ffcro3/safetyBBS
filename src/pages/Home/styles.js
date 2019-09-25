@@ -1,5 +1,4 @@
 import styled, { keyframes } from 'styled-components';
-import { FadeIn } from 'react-animations';
 
 export const FadeInAnimation = keyframes`
   from { opacity: 0; }

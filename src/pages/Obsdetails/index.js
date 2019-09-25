@@ -12,7 +12,7 @@ import {
   Loading,
   PageTitle,
 } from '../../Components/index';
-import {} from './styles';
+import { BasicInfo, Divider, BackLink } from './styles';
 
 import { FaRegClock } from 'react-icons/fa';
 import logo from '../../assets/logo.jpg';
@@ -41,7 +41,7 @@ export default class Obsdetails extends Component {
       BBSDetails: actualBBS,
     });
 
-    console.log(response.data.RecordNo);
+    console.log(response.data);
   }
 
   openSearch = async () => {
@@ -121,6 +121,20 @@ export default class Obsdetails extends Component {
           </Header>
           <Container>
             <PageTitle>Obsersavtion: {observations.RecordNo}</PageTitle>
+            <Divider></Divider>
+            <BasicInfo>ID: {observations.Id}</BasicInfo>
+            <BasicInfo>Record Number: {observations.RecordNo}</BasicInfo>
+            <BasicInfo>
+              Assessment Date: {observations.AssessmentDate}
+            </BasicInfo>
+            <BasicInfo>Location: {observations.Location.Name}</BasicInfo>
+            <BasicInfo>Created By: {observations.CreatedBy.FullName}</BasicInfo>
+            <BasicInfo>
+              Employee Observed: {observations.EmployeeText}
+            </BasicInfo>
+            <BackLink>
+              <Link to="/home">{`<- Back to BBS list`}</Link>
+            </BackLink>
           </Container>
         </Page>
       </>
