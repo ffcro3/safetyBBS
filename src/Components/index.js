@@ -1,4 +1,20 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+export const FadeInAnimation = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+export const FadeOutAnimation = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
+
+export const PageTitle = styled.h1`
+  @import url('https://fonts.googleapis.com/css?family=Heebo:800|Montserrat&display=swap');
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+`;
 
 export const Header = styled.div`
   display: flex;
@@ -9,23 +25,45 @@ export const Header = styled.div`
   height: 60px;
   background: #6696c8;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  padding: 0 30px;
+  padding: 0 50px;
   justify-content: space-between;
 
-  img {
-    max-height: 60%;
-    max-width: 100%;
-  }
+  div#logo {
+    display: flex;
+    align-items: center;
 
-  input#search {
-    border-radius: 4px;
-    border: 1px solid #eee;
-    padding: 6px 10px;
-    font-size: 12px;
-    color: #7c7c7c;
-    width: 35%;
+    img {
+      max-height: 40px;
+      max-width: 100%;
+    }
+
+    svg {
+      margin-right: 15px;
+      height: 70px;
+      color: #333;
+    }
   }
 `;
+
+export const Search = styled.div`
+  min-width: 300px;
+
+  input#search {
+    border: 1px transparent;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #fff;
+    width: 100%;
+    background: transparent;
+    border-bottom: 0.5px solid #fff;
+
+    ::placeholder {
+      color: #fff;
+    }
+  }
+`;
+
+export const menu = styled.ul``;
 
 export const Page = styled.div`
   position: absolute;
@@ -107,5 +145,83 @@ export const Pagination = styled.div`
   span {
     font-size: 11px;
     color: #666;
+  }
+`;
+
+export const Loading = styled.div`
+  color: #fff;
+  font-size: 30px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+export const SearchPage = styled.div`
+  background: #bcc4db;
+  animation: 1s ${FadeInAnimation};
+  color: #333;
+  font-size: 30px;
+  font-weight: bold;
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  span {
+    margin: 5px 5%;
+    margin-bottom: 20px;
+    color: #3d405b;
+    font-size: 16px;
+  }
+
+  span#closeBtn {
+    position: absolute;
+    @import url('https://fonts.googleapis.com/css?family=Heebo:800|Montserrat&display=swap');
+    font-family: 'Heebo', sans-serif;
+    color: #3d405b;
+    font-size: 20px;
+    margin: 30px 94%;
+    cursor: pointer;
+  }
+
+  span#recents {
+    @import url('https://fonts.googleapis.com/css?family=Heebo:800|Montserrat&display=swap');
+    font-family: 'Monteerrat', sans-serif;
+    font-size: 14px;
+    color: #5c5c5c;
+    margin: 10px 6%;
+
+    svg {
+      margin-right: 5px;
+      justify-content: center;
+      align-items: center;
+      color: #919090;
+    }
+    small {
+      margin-right: 10px;
+      color: #919090;
+    }
+  }
+
+  input {
+    margin: 25px 5%;
+    align-content: left;
+    @import url('https://fonts.googleapis.com/css?family=Heebo:800|Montserrat&display=swap');
+    font-family: 'Heebo', sans-serif;
+    width: 80%;
+    height: 16vh;
+    font-size: 50px;
+    border: transparent;
+    color: #3d405b;
+    background: transparent;
+    border-bottom: 0.5px solid transparent;
+
+    ::placeholder {
+      color: #3d405b;
+    }
   }
 `;

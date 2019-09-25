@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
+import { FaRegClock } from 'react-icons/fa';
 
 import {
   Header,
   Page,
   Container,
   Table,
+  Search,
   TableData,
   TableHeader,
   Pagination,
 } from '../../Components/index';
-import { PageTitle, Loading } from './styles';
+import { PageTitle, Loading, SearchPage, BbsLink } from './styles';
 import logo from '../../assets/logo.jpg';
 
 export default class Home extends Component {
@@ -20,11 +23,12 @@ export default class Home extends Component {
     loading: true,
     loadingPage: false,
     page: 1,
+    search: false,
   };
 
   async componentDidMount() {
     const response = await api.get(
-      `/object/BehBasSaf_BBSObject?$top=30&$skip=121000&$expand=Location($select=Name),CreatedBy($select=FullName, FirstName),Categories`
+      `/object/BehBasSaf_BBSObject?$top=30&$skip=0&$expand=Location($select=Name),CreatedBy($select=FullName, FirstName),Categories`
     );
 
     this.setState({
@@ -35,51 +39,82 @@ export default class Home extends Component {
     console.log(this.state.observations);
   }
 
-  handlePageClick = async e => {
-    const nextPage = Number(e.target.value);
-
-    await this.setState({ page: nextPage });
-
-    this.loadBBS();
+  openSearch = async () => {
+    await this.setState({
+      search: true,
+    });
   };
 
-  loadBBS = async () => {
-    const { page, loadingPage } = this.state;
-
+  closeSearch = async () => {
     await this.setState({
-      loadingPage: true,
-    });
-
-    const response = await api.get(
-      `/object/BehBasSaf_BBSObject?$top=30&$skip=${(page - 1) *
-        30}&$expand=Location($select=Name),CreatedBy($select=FullName, FirstName),Categories`
-    );
-
-    this.setState({
-      observations: response.data.value,
-      loadingPage: false,
+      search: false,
     });
   };
 
   render() {
-    const { observations, loading, page, loadingPage } = this.state;
+    const { observations, loading, page, loadingPage, search } = this.state;
     if (loading) {
-      return <Loading>Carregando BBS...</Loading>;
+      return <Loading>Carregando...</Loading>;
     }
 
     if (loadingPage) {
-      return <Loading>Carregando página {page}...</Loading>;
+      return <Loading>Loading Page: {page}...</Loading>;
+    }
+
+    if (search) {
+      return (
+        <SearchPage>
+          <input type="text" placeholder="Search..." />
+          <span id="closeBtn" onClick={this.closeSearch}>
+            X
+          </span>
+          <span>Recently Searched:</span>
+          <span id="recents">
+            <FaRegClock />
+            <small>5m</small>
+            Lorem Ipsum
+          </span>
+          <span id="recents">
+            <FaRegClock />
+            <small>15m</small>
+            Lorem Ipsum
+          </span>
+          <span id="recents">
+            <FaRegClock />
+            <small>24m</small>
+            Lorem Ipsum
+          </span>
+          <span id="recents">
+            <FaRegClock />
+            <small>25m</small>
+            Lorem Ipsum
+          </span>
+        </SearchPage>
+      );
     }
 
     return (
       <>
         <Page>
           <Header>
-            <img src={logo} alt="SafetyBBSlogo" />
-            <input type="text" placeholder="Procurar BBS" id="search" />
+            <div id="logo">
+              <Link to="/home">
+                <img src={logo} alt="SafetyBBSlogo" />
+              </Link>
+            </div>
+            <div>
+              <Search>
+                <input
+                  type="text"
+                  placeholder="Search observations"
+                  id="search"
+                  onClick={this.openSearch}
+                />
+              </Search>
+            </div>
           </Header>
           <Container>
-            <PageTitle>Meus BBS</PageTitle>
+            <PageTitle>My Safety Observations</PageTitle>
             <Table>
               <tbody>
                 <tr>
@@ -89,10 +124,15 @@ export default class Home extends Component {
                   <TableHeader>Status</TableHeader>
                   <TableHeader>Employee Observed</TableHeader>
                 </tr>
-
                 {observations.map((bbs, index) => (
                   <tr key={observations[index].Id}>
-                    <TableData>{observations[index].RecordNo}</TableData>
+                    <TableData>
+                      <BbsLink>
+                        <Link to={`/Obsdetails/${observations[index].Id}`}>
+                          {observations[index].RecordNo}
+                        </Link>
+                      </BbsLink>
+                    </TableData>
                     <TableData>{observations[index].Location.Name}</TableData>
                     <TableData>{observations[index].AssessmentDate}</TableData>
                     <TableData>
@@ -110,12 +150,12 @@ export default class Home extends Component {
                 ''
               ) : (
                 <button value={page - 1} onClick={this.handlePageClick}>
-                  Anterior
+                  Previous
                 </button>
               )}
-              <span>Página: {page}</span>
+              <span>Page: {page}</span>
               <button value={page + 1} onClick={this.handlePageClick}>
-                Próxima
+                Next
               </button>
             </Pagination>
           </Container>
